@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Chatastrophe</title>
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+            #new_chat{
+                width: 100px;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="demo">
+            <button v-on:click="toggle"><h1>
+                Chatastrophe
+            </h1></button>
+            <template v-if="!viewListe">
+                <h2>Liste des chats approuvés</h2>
+                <ul>
+                    <template v-for="chaton in liste_chats">
+                    <li>
+                        <img v-bind:src="chat" alt="chat">
+                    </li>
+                    </template>
+                </ul>
+                <!-- <template v-for="chaton in liste_chats"></template>
+                <p>{{ liste_chats }}</p> -->
+            </template>
+            <template v-if="viewListe">
+                <h2>Nouveau chat</h2>
+                <div id='new-chat'>
+                    <pre>{{ chat }}</pre>
+                    <!-- <img :src="chat"></div> -->
+                <button>Like</button>
+                <button>dislike</button>
+            </template>
+        </div>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.min.js"></script>
+        <script>
+            const apiURL = 'https://api.thecatapi.com/v1/images/'
+            const api_key = 'bac02948-3fb2-4308-8640-1c6e351b5e05'
+    
+            const demo = new Vue({
+                el: '#demo',
+                data: {
+                    liste_chats: [],
+                    viewListe: true,
+                    chat: null,
+                },
+                created: function () {
+                    this.fetchCat()
+                },
+                watch: {
+                    //currentBranch: 'fetchData'
+                },
+                filters: {
+                    // truncate: function (v) {
+                    //     const newline = v.indexOf('\n')
+                    //     return newline > 0 ? v.slice(0, newline) : v
+                    // },
+                    // formatDate: function (v) {
+                    //     return v.replace(/T|Z/g, ' ')
+                    // }
+                },
+                methods: {
+                    toggle: function()
+                    {
+                        this.viewListe=!this.viewListe;
+                    },
+                    fetchCat: function () {
+				  	    axios.get(apiURL + 'search?order=random&format=json&api_key=' + api_key)
+					    .then((response) => {
+					  	    console.log(response.data[0]["url"])
+
+                            this.chat=response.data[0]["url"]
+                            //this.chat=response.data[0]["url"]
+					    })
+					        .catch((error) => {
+					        console.log(error);
+					    })
+                    },
+                    // fetchCat () {
+                    //     axios
+                    //     .get(apiURL + 'search?order=random&format=json&api_key=' + api_key)
+                    //     .then(response => (this.chat = response['url']), console.log(response))
+                    // }
+                    // Version promesse et fonction fléchée
+                    
+                }
+            })
+        </script>
+    </body>
+</html>
