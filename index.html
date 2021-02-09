@@ -24,7 +24,7 @@
                 <ul>
                     <template v-for="chaton in liste_chats">
                     <li>
-                        <img v-bind:src="chat" alt="chat">
+                        <img v-bind:src="chaton" alt="chat">
                     </li>
                     </template>
                 </ul>
@@ -36,8 +36,8 @@
                 <div id='new-chat'>
                     <pre>{{ chat }}</pre>
                     <img :src="chat"></div>
-                <button>Like</button>
-                <button>dislike</button>
+                <button v-on:click="like">Like</button>
+                <button v-on:click="fetchCat">dislike</button>
             </template>
         </div>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -84,6 +84,11 @@
 					        .catch((error) => {
 					        console.log(error);
 					    })
+                    },
+                    like: function()
+                    {
+                        this.liste_chats.push(this.chat);
+                        this.fetchCat();
                     },
                     // fetchCat () {
                     //     axios
